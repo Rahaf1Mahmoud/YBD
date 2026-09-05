@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Hazoona 🦋</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Pacifico&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brown-dark: #4E342E;
+            --brown-mid: #8D6E63;
+            --brown-light: #D7CCC8;
+            --beige: #F5F5DC;
+            --cream: #FFF8E1;
+            --gold: #FFD700;
+        }
+        
+        body {
+            font-family: 'Poppins', 'Aref Ruqaa', sans-serif;
+            background: linear-gradient(135deg, #3E2723 0%, #5D4037 25%, #8D6E63 60%, #D7CCC8 100%);
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .font-arabic { font-family: 'Aref Ruqaa', serif; }
+        .font-english { font-family: 'Poppins', sans-serif; }
+        .font-hand { font-family: 'Pacifico', cursive; }
+
+        /* Screen Transitions */
+        .screen {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            transform: scale(0.95);
+            padding: 1.5rem;
+            z-index: 10;
+        }
+        .screen.active {
+            opacity: 1;
+            pointer-events: all;
+            transform: scale(1);
+            z-index: 20;
+        }
+
+        /* Butterflies */
+        .butterfly {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+            z-index: 1;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .butterfly svg { width: 100%; height: 100%; }
+        @keyframes flutter {
+            0%, 100% { transform: scaleX(1) rotate(0deg); }
+            50% { transform: scaleX(0.6) rotate(5deg); }
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -40px) rotate(10deg); }
+            50% { transform: translate(-20px, -80px) rotate(-5deg); }
+            75% { transform: translate(40px, -40px) rotate(5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        /* Polaroid Photos */
+        .polaroid {
+            background: var(--cream);
+            padding: 8px 8px 24px 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.35), 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .polaroid::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            box-shadow: inset 0 0 20px rgba(139, 69, 19, 0.08);
+            pointer-events: none;
+        }
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: contrast(1.15) saturate(1.1) sepia(0.08);
+            background: #e0e0e0;
+        }
+        .polaroid-caption {
+            position: absolute;
+            bottom: 6px;
+            left: 0; right: 0;
+            text-align: center;
+            font-family: 'Aref Ruqaa', serif;
+            font-size: 0.7rem;
+            color: var(--brown-dark);
+            opacity: 0.8;
+        }
+
+        /* Passcode Dots */
+        .passcode-box {
+            width: 50px; height: 50px;
+            border: 2px solid var(--cream);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cream);
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(4px);
+        }
+        .passcode-box.filled {
+            background: rgba(255,255,255,0.2);
+            border-color: var(--gold);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Keypad */
+        .key-btn {
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            background: rgba(245, 245, 220, 0.95);
+            color: var(--brown-dark);
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: all 0.15s;
+            cursor: pointer;
+            user-select: none;
+            font-family: 'Poppins', sans-serif;
+        }
+        .key-btn:active { transform: scale(0.92); background: var(--beige); }
+
+        /* Custom Buttons */
+        .btn-main {
+            background: linear-gradient(135deg, var(--beige), var(--cream));
+            color: var(--brown-dark);
+            padding: 12px 40px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .btn-main:active { transform: translateY(0); }
+
+        /* Cat Animations */
+        @keyframes catBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .cat-container { animation: catBounce 3s ease-in-out infinite; }
+        
+        /* Shake for wrong passcode */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-10px); }
+            40% { transform: translateX(10px); }
+            60% { transform: translateX(-6px); }
+            80% { transform: translateX(6px); }
+        }
+        .shake { animation: shake 0.5s ease-in-out; }
+
+        /* Glow effects */
+        .text-glow { text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .gold-glow { text-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
+
+        /* Scrollbar hide */
+        ::-webkit-scrollbar { display: none; }
+
+        /* Photo rotations */
+        .rot-1 { transform: rotate(-2deg); }
+        .rot-2 { transform: rotate(2.5deg); }
+        .rot-3 { transform: rotate(-1.5deg); }
+        .rot-4 { transform: rotate(1deg); }
+        .rot-5 { transform: rotate(-3deg); }
+        .rot-6 { transform: rotate(2deg); }
+
+        /* Message text styling */
+        .message-text {
+            line-height: 2;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen w-full relative">
+
+    <!-- Animated Background Butterflies -->
+    <div id="butterflies-container" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
+
+    <!-- Main App -->
+    <div class="relative z-10 w-full max-w-lg mx-auto min-h-screen flex flex-col">
+
+        <!-- Screen 1: Intro -->
+        <div class="screen active" id="screen-intro">
+            <div class="text-center space-y-6 max-w-xs">
+                <h1 class="font-hand text-3xl text-[#FFF8E1] text-glow leading-relaxed">
+                    I made something<br>for you!!<br>
+                    <span class="text-xl">You want to see it?!</span>
+                </h1>
+                
+                <div class="cat-container flex justify-center py-4">
+                    <svg id="cat-intro" width="140" height="140" viewBox="0 0 200 200">
+                        <ellipse cx="100" cy="165" rx="55" ry="45" fill="#F5F5DC"/>
+                        <circle cx="100" cy="100" r="65" fill="#F5F5DC"/>
+                        <path d="M45,70 L25,25 L80,60 Z" fill="#8D6E63"/>
+                        <path d="M155,70 L175,25 L120,60 Z" fill="#8D6E63"/>
+                        <path d="M50,65 L35,35 L72,58 Z" fill="#FFCDD2"/>
+                        <path d="M150,65 L165,35 L128,58 Z" fill="#FFCDD2"/>
+                        <g id="cat-intro-eyes">
+                            <circle cx="75" cy="95" r="9" fill="#3E2723"/>
+                            <circle cx="125" cy="95" r="9" fill="#3E2723"/>
+                            <circle cx="78" cy="92" r="3" fill="white"/>
+                            <circle cx="128" cy="92" r="3" fill="white"/>
+                        </g>
+                        <path d="M92,115 L108,115 L100,125 Z" fill="#FFAB91"/>
+                        <path id="cat-intro-mouth" d="M85,130 Q100,142 115,130" stroke="#3E2723" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <line x1="35" y1="110" x2="65" y2="115" stroke="#3E2723" stroke-width="1.5" opacity="0.4"/>
+                        <line x1="35" y1="120" x2="65" y2="120" stroke="#3E2723" stroke-width="1.5" opacity="0.4"/>
+                        <line x1="165" y1="110" x2="135" y2="115" stroke="#3E2723" stroke-width="1.5" opacity="0.4"/>
+                        <line x1="165" y1="120" x2="135" y2="120" stroke="#3E2723" stroke-width="1.5" opacity="0.4"/>
+                    </svg>
+                </div>
+
+                <button onclick="goToScreen('screen-passcode')" class="btn-main text-lg tracking-widest">
+                    YESS!! 🎉
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 2: Passcode -->
+        <div class="screen" id="screen-passcode">
+            <div class="w-full max-w-xs space-y-8">
+                <h2 class="font-english text-2xl text-[#FFF8E1] text-center text-glow tracking-wider font-bold">ENTER A PASSCODE</h2>
+                
+                <div class="flex justify-center gap-4" id="passcode-dots">
+                    <div class="passcode-box" data-index="0"></div>
+                    <div class="passcode-box" data-index="1"></div>
+                    <div class="passcode-box" data-index="2"></div>
+                </div>
+
+                <div class="cat-container flex justify-center">
+                    <svg id="cat-passcode" width="120" height="120" viewBox="0 0 200 200">
+                        <ellipse cx="100" cy="165" rx="55" ry="45" fill="#F5F5DC"/>
+                        <circle cx="100" cy="100" r="65" fill="#F5F5DC"/>
+                        <path d="M45,70 L25,25 L80,60 Z" fill="#8D6E63"/>
+                        <path d="M155,70 L175,25 L120,60 Z" fill="#8D6E63"/>
+                        <path d="M50,65 L35,35 L72,58 Z" fill="#FFCDD2"/>
+                        <path d="M150,65 L165,35 L128,58 Z" fill="#FFCDD2"/>
+                        <g id="cat-pc-eyes">
+                            <circle cx="75" cy="95" r="9" fill="#3E2723"/>
+                            <circle cx="125" cy="95" r="9" fill="#3E2723"/>
+                            <circle cx="78" cy="92" r="3" fill="white"/>
+                            <circle cx="128" cy="92" r="3" fill="white"/>
+                        </g>
+                        <path d="M92,115 L108,115 L100,125 Z" fill="#FFAB91"/>
+                        <path id="cat-pc-mouth" d="M85,130 Q100,142 115,130" stroke="#3E2723" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 justify-items-center" id="keypad">
+                    <div class="key-btn" onclick="enterDigit(1)">1</div>
+                    <div class="key-btn" onclick="enterDigit(2)">2</div>
+                    <div class="key-btn" onclick="enterDigit(3)">3</div>
+                    <div class="key-btn" onclick="enterDigit(4)">4</div>
+                    <div class="key-btn" onclick="enterDigit(5)">5</div>
+                    <div class="key-btn" onclick="enterDigit(6)">6</div>
+                    <div class="key-btn" onclick="enterDigit(7)">7</div>
+                    <div class="key-btn" onclick="enterDigit(8)">8</div>
+                    <div class="key-btn" onclick="enterDigit(9)">9</div>
+                    <div class="col-start-2 key-btn" onclick="enterDigit(0)">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 3: Nickname -->
+        <div class="screen" id="screen-nickname">
+            <div class="text-center space-y-6 max-w-xs">
+                <h1 class="font-hand text-5xl text-[#FFD700] gold-glow mb-2">Hazoona</h1>
+                <p class="font-english text-xl text-[#FFF8E1] text-glow">Happy Birthday my<br>Butterfly!! 🦋</p>
+                
+                <div class="py-4 flex justify-center">
+                    <div class="relative w-48 h-40">
+                        <!-- Vintage Camera SVG -->
+                        <svg viewBox="0 0 200 160" class="w-full h-full drop-shadow-2xl">
+                            <rect x="20" y="40" width="160" height="100" rx="8" fill="#D7CCC8"/>
+                            <rect x="10" y="50" width="180" height="80" rx="5" fill="#8D6E63"/>
+                            <rect x="30" y="60" width="120" height="70" rx="3" fill="#3E2723"/>
+                            <rect x="35" y="65" width="110" height="60" rx="2" fill="#212121"/>
+                            <!-- Screen -->
+                            <rect x="40" y="70" width="100" height="50" rx="2" fill="#5D4037"/>
+                            <text x="90" y="100" text-anchor="middle" fill="#F5F5DC" font-size="12" font-family="Pacifico">Hazoona</text>
+                            <!-- Lens -->
+                            <circle cx="170" cy="95" r="18" fill="#D7CCC8"/>
+                            <circle cx="170" cy="95" r="14" fill="#4E342E"/>
+                            <circle cx="170" cy="95" r="10" fill="#212121"/>
+                            <circle cx="170" cy="95" r="4" fill="#FFD700" opacity="0.6"/>
+                            <!-- Flash -->
+                            <rect x="80" y="30" width="40" height="15" rx="3" fill="#D7CCC8"/>
+                            <rect x="85" y="33" width="30" height="9" rx="2" fill="#FFF8E1"/>
+                            <!-- Button -->
+                            <rect x="155" y="32" width="15" height="8" rx="2" fill="#5D4037"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <button onclick="goToScreen('screen-message')" class="btn-main">
+                    NEXT !! ✨
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 4: Message -->
+        <div class="screen" id="screen-message">
+            <div class="w-full max-w-sm space-y-6 text-center">
+                <h2 class="font-hand text-3xl text-[#FFD700] gold-glow">FOR YOU <3</h2>
+                
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 shadow-xl">
+                    <p class="font-arabic text-[#FFF8E1] text-lg message-text text-right leading-loose">
+                        هاابيي بيرثدايي يزن وعقبال كل أعوامكك تقضيهم بخير وهنا وسعادة وحب وطاعة وراحة بال وإن شاء الله يكون عام تحقيق أحلامك وكل إشي ببالك ي أجدعع مهندسس وأحلى يزنن 🌝❤️<br><br>
+                        احمم مش محتاج الموضوع أحكيهه بس عامكك هاد هيكون أحلى من كل لقبل لأنك تعرفت عع حداا زيي 😂❤️<br><br>
+                        يلل يبروو إنجويي بيومكك يي أحلى هزونن بحياتيي 😂❤️❤️❤️ ✨
+                    </p>
+                </div>
+
+                <button onclick="goToScreen('screen-photos-0')" class="btn-main">
+                    NEXT !! 🎂
+                </button>
+            </div>
+        </div>
+
+        <!-- Photo Screens (Generated via JS) -->
+        <div id="photo-screens-container"></div>
+
+        <!-- Final Screen (embedded in last photo screen via JS) -->
+
+    </div>
+
+    <script>
+        /* ================= CONFIGURATION ================= */
+        // ⚠️ استبدل هذه الروابط بروابط صورك الحقيقية بعد رفعها
+        const PHOTO_LINKS = [
+            "https://placehold.co/400x500/5D4037/F5F5DC?text=Hazoona+1",
+            "https://placehold.co/400x500/5D4037/F5F5DC?text=Hazoona+2",
+            "https://placehold.co/400x500/5D4037/F5F5DC?text=Hazoona+3",
+            "https://placehold.co/400x500/5D4037/F5F5DC?text=Hazoona+4",
+            "https://placehold.co/400x500/5D4037/F5F5DC?text=Hazoona+5",
+            "https://placehold.co/400x500/5D4037/F5F5DC?text=Hazoona+6"
+        ];
+
+        const PHOTO_CAPTIONS = [
+            "يزن الجميل ❤️",
+            "البروو اللطيف ❤️",
+            "أحن يزن ❤️",
+            "أحلى مهندس ❤️"
+        ];
+
+        const PASSCODE = "119";
+        /* ================================================= */
+
+        let currentScreen = 'screen-intro';
+        let enteredPasscode = "";
+        let photoIndex = 0;
+
+        // Shuffle function (Fisher-Yates)
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Prepare photos and captions
+        const shuffledPhotos = shuffle([...PHOTO_LINKS]);
+        const shuffledCaptions = shuffle([...PHOTO_CAPTIONS]);
+        const rotations = ['rot-1', 'rot-2', 'rot-3', 'rot-4', 'rot-5', 'rot-6'];
+
+        // Generate Photo Screens (3 screens, 2 photos each)
+        const photoContainer = document.getElementById('photo-screens-container');
+        for (let i = 0; i < 3; i++) {
+            const screenId = `screen-photos-${i}`;
+            const isLast = i === 2;
+            const photo1 = shuffledPhotos[i * 2];
+            const photo2 = shuffledPhotos[i * 2 + 1];
+            const caption = shuffledCaptions[i];
+            const rot1 = rotations[i * 2];
+            const rot2 = rotations[i * 2 + 1];
+
+            let finalText = '';
+            if (isLast) {
+                finalText = `
+                    <div class="mt-6 text-center space-y-2 animate-bounce">
+                        <p class="font-arabic text-[#FFD700] text-xl gold-glow">صنع بحب منن رهوفة ليزونن ❤️✨</p>
+                        <p class="font-hand text-[#FFF8E1] text-lg">Happy birthday brooo ❤️✨</p>
+                    </div>
+                `;
+            }
+
+            const nextBtn = isLast ? '' : `<button onclick="goToScreen('screen-photos-${i+1}')" class="btn-main mt-6">NEXT !! ❤️</button>`;
+
+            const html = `
+                <div class="screen" id="${screenId}">
+                    <div class="w-full max-w-sm space-y-5 flex flex-col items-center">
+                        <h3 class="font-hand text-2xl text-[#FFF8E1] text-glow text-center">${caption}</h3>
+                        
+                        <div class="flex justify-center items-end gap-3 px-2">
+                            <div class="polaroid ${rot1} w-36">
+                                <img src="${photo1}" alt="Memory" loading="lazy">
+                            </div>
+                            <div
+  
